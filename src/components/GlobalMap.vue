@@ -7,14 +7,16 @@
 <script>
 import echarts from "echarts"
 import "echarts-gl"
+import axios from "axios"
+
 export default {
 	data () {
     return {
-
+      dict: ''
     }
   },
   mounted(){
-    this.drawGlobal();
+    this.readData()
   },
   methods: {
     drawGlobal(){
@@ -40,7 +42,7 @@ export default {
                     shadow: true
                 },
                 ambientCubemap: {
-                    texture: '../asset/pisa.hdr',
+                    texture: "../asset/pisa.hdr",
                     diffuseIntensity: 0.2
                 }
             }
@@ -48,6 +50,18 @@ export default {
       }
       var chart=echarts.init(document.getElementById("container"));
       chart.setOption(option);
+    },
+
+    readData(){
+      axios.post('http://127.0.0.1:5000/api/index',{
+        mode: 1
+      }).then(res=>{
+        this.dict=res.data.doc;
+        this.drawGlobal();
+        console.log(this.dict)
+      }).catch(err=>{
+        console.log(err);
+      })
     }
   }
 
