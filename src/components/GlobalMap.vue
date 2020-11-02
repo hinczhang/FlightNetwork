@@ -1,6 +1,17 @@
 <template>
   <div>
-    <div id="container" style="height:500px;width:500px"></div>
+    <el-select v-model="value" placeholder="Please choose mode" style="position:absolute;z-index:100;left:0">
+      <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value">
+      </el-option>
+    </el-select>
+    <div id="container" style="height:100%;width:100%">
+      
+    </div>
+    
   </div>
 </template>
 
@@ -12,7 +23,24 @@ import axios from "axios"
 export default {
 	data () {
     return {
-      dict: ''
+      routes:[],
+      options: [{
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶'
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }, {
+          value: '选项4',
+          label: '龙须面'
+        }, {
+          value: '选项5',
+          label: '北京烤鸭'
+      }],
+      value: ''
     }
   },
   mounted(){
@@ -20,6 +48,7 @@ export default {
   },
   methods: {
     drawGlobal(){
+      var routes=this.routes
       var option={
         globe: {
             baseTexture: require("../assets/world.jpg"),
@@ -46,7 +75,27 @@ export default {
                     diffuseIntensity: 0.2
                 }
             }
-        }   
+        },
+        series: {
+            type: 'lines3D',
+            coordinateSystem: 'globe',
+            effect: {
+                show: true,
+                trailWidth: 2,
+                trailLength: 0.15,
+                trailOpacity: 1,
+                trailColor: 'rgb(30, 30, 60)'
+            },
+
+            lineStyle: {
+                width: 1,
+                color: 'rgb(50, 50, 150)',
+                // color: 'rgb(118, 233, 241)',
+                opacity: 0.1
+            },
+            blendMode: 'lighter',
+            data: routes
+        }
       }
       var chart=echarts.init(document.getElementById("container"));
       chart.setOption(option);
@@ -56,9 +105,8 @@ export default {
       axios.post('http://127.0.0.1:5000/api/index',{
         mode: 1
       }).then(res=>{
-        this.dict=res.data.doc;
+        this.routes=res.data.routes;
         this.drawGlobal();
-        console.log(this.dict)
       }).catch(err=>{
         console.log(err);
       })
