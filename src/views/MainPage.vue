@@ -1,6 +1,6 @@
 <template>
     <div>
-        <global-map style="height:1000px;width:100%"/>
+        <global-map/>
     </div>
 </template>
 
