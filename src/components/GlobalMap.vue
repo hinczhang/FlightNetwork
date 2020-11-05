@@ -23,14 +23,19 @@
       </el-dropdown>
     </el-row>
     <el-row>
-      <!-- <div style="position:relative;top:180px"><el-card :body-style="{padding:'0px', height: '100px', width:'100px'}"></el-card></div> -->
-      <el-card :body-style="{ padding: '0px', height:'750px' }" v-loading="loading">
-        <el-col :span="7">
-          <el-card :body-style="{ padding: '0px' }">
-            55
+      <el-card :body-style="{ padding: '0px' }" v-loading="loading">
+        <el-col :span="8">
+          <el-card :body-style="{ padding: '0px', width: '100%' }" style="background-color: #424242">
+            <div slot="header" class="date_head">
+              时间：
+              <span class="date">{{this.date_str.substring(0,4)+"年"+this.date_str.substring(4,6)+"月"+this.date_str.substring(6,8)+"日"}}</span>
+            </div>
+            
+              <temporal-chart></temporal-chart>
+            
           </el-card>
         </el-col>
-        <el-col :span="14"><div id="container" style="height:750px;width:100%"></div></el-col>
+        <el-col :span="13"><div id="container" style="height:819px;width:100%"></div></el-col>
         <el-col :span="3">dfdfddssdfdsfdsfsdfdsffdsf</el-col>
       </el-card>
     </el-row>    
@@ -41,7 +46,7 @@
 import echarts from "echarts"
 import "echarts-gl"
 import axios from "axios"
-
+import TemporalChart from "./TemporalChart"
 function dateFormat(fmt, date) {
     let ret;
     const opt = {
@@ -67,6 +72,9 @@ function setDate(date){
 }
 
 export default {
+  components:{
+    TemporalChart
+  },
 	data () {
     return {
       routes:[],
@@ -145,6 +153,7 @@ export default {
     date_change(e){
       e=dateFormat("YYYY-mm-dd",e);
       this.loading=true;
+      this.date_str=e
       axios.post('http://127.0.0.1:5000/api/index',{
          mode: 2,
          date:e
@@ -201,7 +210,25 @@ export default {
 .el-icon-arrow-down {
   font-size: 12px;
 }
-
+.date{
+  font-family: "times new roman", times, serif;
+  color:#ADAFB3;
+  font-size: 26px;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 4.2pt;
+}
+.date_head{
+  font-family: "times new roman", times, serif;
+  color: #ADAFB3;
+  font-size: 26px;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 4.2pt;
+  word-spacing: 2.2pt;
+  line-height: 1.2;
+  height: 30px;
+}
 </style>
 
 <style>
