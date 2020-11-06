@@ -1,7 +1,9 @@
 <template>
-    <div>
-        <global-map/>
-    </div>
+    <el-container>
+        <el-main style="padding: 0">
+            <global-map/>
+        </el-main>
+    </el-container>
 </template>
 
 <script>
