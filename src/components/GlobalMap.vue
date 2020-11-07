@@ -1,7 +1,10 @@
 <template>
   <div>
     <el-row class="dashboard-style">
-      <el-dropdown :hide-on-click="false" trigger="click" style="float:right;top:20px;right:30px;">
+      <el-col :span="1"><img style="width:55px;height:55px;margin-top:10.5px;margin-left:15px" :src="url"></el-col>
+      <el-col :span="22"><div style="margin-left:30px">武汉大学遥感信息工程学院 国际航空网络分析平台</div></el-col>
+      <el-col :span="1">
+      <el-dropdown :hide-on-click="false" trigger="click" style="right:0px;">
         <span class="el-dropdown-link">
           <i class="el-icon-s-operation el-icon--right"></i>
         </span>
@@ -21,6 +24,7 @@
           <el-dropdown-item :divided="true">关于</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
+      </el-col>
     </el-row>
     <el-row>
       <el-card :body-style="{ padding: '0px' }" v-loading="loading">
@@ -105,6 +109,8 @@ export default {
 	data () {
     return {
       routes:[],
+      url:require("../assets/logo.jpg"),
+      fit:"fit",
       date:1577808000000,
       date_str:'20200101',
       date_list:[],
@@ -128,9 +134,9 @@ export default {
   },
   methods: {
     collapseChange (val) {
-      if(this.val==val){
-        return
-      }
+      // if(this.val==val){
+      //   return
+      // }
       if(this.activeArray.indexOf(val)>-1){
         this.val=val  
         this.loading=true
@@ -140,7 +146,7 @@ export default {
           attribute: val
         }).then(res=>{
           this.drawGlobal(res.data.array);
-          //this.loading=false;
+          //console.log(this.loading)
         }).catch(err=>{
           console.log(err)
         })
@@ -191,7 +197,7 @@ export default {
         },
         itemStyle: {
           color: 'rgb(50, 50, 150)',
-          opacity: 0.3
+          opacity: 1
         },
         emphasis:{
           label:{
@@ -199,7 +205,9 @@ export default {
               return params.data.name
             },
             textStyle:{
-              color:'black'
+              color:'black',
+              borderColor:'black',
+              fontsize:16
             }
           }
         },
@@ -219,7 +227,8 @@ export default {
                 enable: true
             },
             viewControl:{
-              autoRotate:false
+              autoRotate:false,
+              targetCoord: [116.46, 39.92]
             },
             light: {
                 main: {
@@ -248,8 +257,10 @@ export default {
          date:e
       }).then(res=>{
         this.routes=res.data.routes;
-        this.collapseChange("1");
-        this.activeNames="1"
+        //this.activeNames="1"
+        this.collapseChange(this.activeNames);
+        
+        
       }).catch(err=>{
         console.log(err)
       })
@@ -288,6 +299,14 @@ export default {
 .dashboard-style{
   background-color: rgb(55,25,15);
   height: 80px;
+  font-family: helvetica, sans-serif;
+  color: #867c7c;
+  font-size: 60px;
+  font-weight: bold;
+  text-align: left;
+  letter-spacing: 2.4pt;
+  vertical-align:middle;
+  
 }
 .el-dropdown-link {
   cursor: pointer;
